@@ -237,6 +237,17 @@
     gap: 14px;
   }
 
+  @media (max-width: 900px) {
+    .panel {
+      padding: 12px 14px;
+      gap: 14px;
+    }
+
+    .section {
+      gap: 9px;
+    }
+  }
+
   .hint {
     font-size: 11px;
     line-height: 1.5;

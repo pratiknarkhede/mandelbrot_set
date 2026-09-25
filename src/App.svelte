@@ -12,6 +12,9 @@
 
   let canvasRef = $state<Canvas>()
 
+  /** Mobile bottom-sheet collapse state (the sheet otherwise eats the view) */
+  let sheetOpen = $state(true)
+
   const fractalOptions = FRACTALS.map((f) => ({
     id: f.id,
     name: f.name,
@@ -160,7 +163,15 @@
       />
     </div>
 
-    <div class="panel-wrap">
+    <div class="panel-wrap" class:collapsed={!sheetOpen}>
+      <button
+        class="sheet-toggle"
+        type="button"
+        aria-label={sheetOpen ? 'Collapse panel' : 'Expand panel'}
+        onclick={() => (sheetOpen = !sheetOpen)}
+      >
+        <span aria-hidden="true">{sheetOpen ? '⌄' : '⌃'}</span>
+      </button>
       <ControlPanel
         fractal={{ id: current.id, name: current.name, description: current.description }}
         params={current.params}
@@ -254,6 +265,34 @@
     pointer-events: auto;
   }
 
+  /* Mobile bottom-sheet handle (hidden on desktop) */
+  .sheet-toggle {
+    display: none;
+    position: absolute;
+    top: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 44px;
+    height: 30px;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    background: var(--panel);
+    backdrop-filter: blur(14px);
+    border: 1px solid var(--panel-border);
+    border-bottom: none;
+    border-radius: 10px 10px 0 0;
+    color: var(--text-dim);
+    font-size: 16px;
+    line-height: 1;
+    cursor: pointer;
+    transition: color 0.2s ease;
+  }
+
+  .sheet-toggle:hover {
+    color: var(--text);
+  }
+
   .hud-wrap {
     position: absolute;
     left: 14px;
@@ -328,27 +367,56 @@
   }
 
   @media (max-width: 900px) {
+    /* Notch/safe-area aware chrome */
+    .topbar-wrap {
+      top: max(10px, env(safe-area-inset-top));
+      left: 10px;
+      right: 10px;
+    }
+
+    /* Bottom sheet: collapsible so the fractal stays the star */
     .panel-wrap {
       top: auto;
-      bottom: 14px;
-      left: 14px;
-      right: 14px;
+      bottom: max(10px, env(safe-area-inset-bottom));
+      left: 10px;
+      right: 10px;
       width: auto;
       height: 42%;
+      transition: height 0.25s ease;
+    }
+
+    .panel-wrap.collapsed {
+      height: 42px;
+      overflow: hidden;
+    }
+
+    .sheet-toggle {
+      display: flex;
+    }
+
+    /* HUD rides just above the sheet; drops down when it's collapsed */
+    .hud-wrap {
+      top: auto;
+      bottom: calc(42% + 30px);
+      left: 10px;
+    }
+
+    .panel-wrap.collapsed ~ .hud-wrap {
+      bottom: 64px;
+    }
+
+    /* Landmark card below the two-row topbar, full-width-ish */
+    .landmark-wrap {
+      bottom: auto;
+      top: 128px;
+      left: 10px;
+      right: 10px;
+      transform: none;
+      max-width: none;
     }
 
     .inset-wrap {
       display: none;
-    }
-
-    .landmark-wrap {
-      bottom: auto;
-      top: 106px;
-    }
-
-    .hud-wrap {
-      bottom: auto;
-      top: 70px;
     }
   }
 </style>

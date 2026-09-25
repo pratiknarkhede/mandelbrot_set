@@ -205,12 +205,50 @@
   }
 
   @media (max-width: 860px) {
+    /* Two rows: [∞ + actions] / [fractal · palette selects] */
+    .topbar {
+      flex-wrap: wrap;
+      gap: 10px;
+      padding: 10px 12px;
+    }
+
+    .wordmark {
+      flex: none;
+    }
+
+    .title {
+      display: none;
+    }
+
+    .glyph {
+      font-size: 24px;
+    }
+
+    .actions {
+      gap: 6px;
+    }
+
+    .icon-btn {
+      /* Finger-friendly touch targets */
+      min-width: 42px;
+      min-height: 42px;
+      padding: 9px 12px;
+    }
+
     .btn-label {
       display: none;
     }
 
-    .icon-btn {
-      padding: 7px 11px;
+    .selectors {
+      flex: 1 1 100%;
+      order: 3;
+      min-width: 0;
+    }
+
+    .glass-pill {
+      flex: 1 1 0;
+      min-width: 0;
+      padding: 10px 30px 10px 12px;
     }
   }
 </style>

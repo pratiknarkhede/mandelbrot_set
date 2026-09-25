@@ -113,4 +113,22 @@
     border: none;
     box-shadow: 0 0 8px rgba(124, 158, 255, 0.55);
   }
+
+  @media (pointer: coarse) {
+    /* Finger-friendly: taller hit area and bigger thumb on touch screens */
+    .range {
+      height: 28px;
+    }
+
+    .range::-webkit-slider-thumb {
+      width: 18px;
+      height: 18px;
+      margin-top: -7.5px;
+    }
+
+    .range::-moz-range-thumb {
+      width: 18px;
+      height: 18px;
+    }
+  }
 </style>

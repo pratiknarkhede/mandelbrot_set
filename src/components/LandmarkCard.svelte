@@ -118,4 +118,17 @@
     line-height: 1.55;
     color: var(--text-dim);
   }
+
+  @media (max-width: 700px) {
+    .card {
+      padding: 12px 14px;
+      gap: 6px;
+    }
+
+    .close {
+      width: 34px;
+      height: 34px;
+      font-size: 18px;
+    }
+  }
 </style>

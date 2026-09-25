@@ -562,6 +562,7 @@
     onpointerup={onPointerUp}
     onpointercancel={onPointerUp}
     ondblclick={onDblClick}
+    oncontextmenu={(e) => e.preventDefault()}
   ></canvas>
   {#if webglError}
     <div class="webgl-error">
@@ -587,6 +588,8 @@
     touch-action: none;
     user-select: none;
     -webkit-user-select: none;
+    /* Long-press on touch: no callout sheet, no selection */
+    -webkit-touch-callout: none;
   }
 
   canvas:active {

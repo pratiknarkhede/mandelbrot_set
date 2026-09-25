@@ -9,15 +9,37 @@
 
   let { re, im, mag, iter, fps }: Props = $props();
 
-  function signed(v: number): string {
-    const s = Math.abs(v).toFixed(10);
-    return (v < 0 ? '−' : '+') + s;
+  /** Compact formatting on narrow screens — the 10-decimal desktop strip
+   *  overflows a phone viewport, so coordinates shrink to 4 decimals. */
+  let compact = $state(false)
+
+  $effect(() => {
+    const mq = window.matchMedia('(max-width: 700px)')
+    const update = () => {
+      compact = mq.matches
+    }
+    update()
+    mq.addEventListener('change', update)
+    return () => mq.removeEventListener('change', update)
+  })
+
+  function signed(v: number, decimals: number): string {
+    const s = Math.abs(v).toFixed(decimals)
+    return (v < 0 ? '−' : '+') + s
   }
 
-  const reText = $derived(signed(re));
-  const imText = $derived(signed(im));
-  const magText = $derived(mag < 1e5 ? `×${mag.toFixed(0)}` : `×${mag.toExponential(1)}`);
-  const fpsText = $derived(String(Math.round(fps)));
+  const reText = $derived(signed(re, compact ? 4 : 10))
+  const imText = $derived(signed(im, compact ? 4 : 10))
+  const magText = $derived(
+    compact
+      ? mag < 1e4
+        ? `×${mag.toFixed(0)}`
+        : `×${mag.toExponential(0)}`
+      : mag < 1e5
+        ? `×${mag.toFixed(0)}`
+        : `×${mag.toExponential(1)}`,
+  )
+  const fpsText = $derived(String(Math.round(fps)))
 </script>
 
 <div class="hud" role="status" aria-label="Coordinates and rendering stats">
@@ -44,6 +66,15 @@
     letter-spacing: 0.02em;
     color: var(--text-dim);
     white-space: nowrap;
+    max-width: calc(100vw - 20px);
+  }
+
+  @media (max-width: 700px) {
+    .hud {
+      gap: 10px;
+      padding: 6px 10px;
+      font-size: 11px;
+    }
   }
 
   .cell {
