@@ -1,0 +1,43 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+
+  // Default implementation model: balanced cost and high math accuracy
+  "model": "opencode-go/qwen3.7-plus",
+
+  // Core agent modes (toggle with Tab in the interactive CLI)
+  "agent": {
+    "plan": {
+      "mode": "primary",
+      "model": "opencode-go/glm-5.2",
+      "prompt": "You are the software architect. Maintain high-level architectural consistency, component separation, and plugin interfaces for fractal definitions."
+    },
+    "build": {
+      "mode": "primary",
+      "model": "opencode-go/qwen3.7-plus",
+      "prompt": "You are the lead developer implementing TypeScript, WebGL2 pipelines, and Svelte 5 reactivity."
+    },
+
+    // Subagent 1: Math & GLSL double-float emulation
+    "shader": {
+      "mode": "subagent",
+      "model": "opencode-go/qwen3.8-max",
+      "description": "Writes GLSL fragment shaders, WebGL2 pipeline setup, and df64 double-precision arithmetic.",
+      "prompt": "You specialize in WebGL2, GLSL fragment shaders, and double-single (df64) precision math. Write robust, performant shader routines."
+    },
+
+    // Subagent 2: Svelte 5 UI & state controls
+    "ui": {
+      "mode": "subagent",
+      "model": "opencode-go/glm-5.2",
+      "description": "Builds Svelte 5 runes components, control panels, and state stores.",
+      "prompt": "You write Svelte 5 code. Strictly use runes ($state, $derived, $effect, $props). Never generate Svelte 4 syntax."
+    }
+  },
+
+  // Project-wide rules injected into every prompt
+  "instructions": [
+    "Strictly adhere to Svelte 5 runes ($state, $derived, $effect, $props). Do not use Svelte 4 store patterns or reactive declarations ($:).",
+    "WebGL2 rendering uses a single fullscreen quad with a fragment shader.",
+    "For zoom depths beyond standard float precision, use double-float emulation (df64) splitting numbers into high and low float32 pairs."
+  ]
+}
