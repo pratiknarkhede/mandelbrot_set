@@ -3,11 +3,18 @@
  *
  * Coordinates are plain JS doubles (~15–16 significant digits). The renderer
  * splits them into (hi, lo) float32 pairs when uploading to the shader, so
- * the effective per-pixel precision on the GPU is ~46 bits (~10^12 zoom).
+ * the effective per-pixel precision on the GPU is ~46 bits (~10^13 zoom).
  */
 
 export const MIN_ZOOM = 0.5
-export const MAX_ZOOM = 1e12
+/**
+ * Hard zoom ceiling — the honest limit of df64 (double-float) arithmetic.
+ * Error analysis: view-center error is ~|c| · 2^-47 ≈ 5e-15; a pixel spans
+ * BASE_SPAN/zoom, so at 1e13 magnification the error is ~1.5% of a pixel
+ * (clean), at 1e14 it is ~15% (visible mush). Going past this needs
+ * perturbation theory, not a bigger constant.
+ */
+export const MAX_ZOOM = 1e13
 /** World units visible vertically at zoom = 1 */
 export const BASE_SPAN = 3.0
 

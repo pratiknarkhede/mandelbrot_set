@@ -172,7 +172,7 @@
    * Iterations auto-boosted with zoom depth — the "seemingly infinite" feel.
    * Escape-time fractals need roughly O(log zoom) more iterations as you
    * dive; a fixed count paints deep regions solid long before the df64
-   * precision wall (~10^12). Base comes from the slider; depth does the rest.
+   * precision wall (~10^13). Base comes from the slider; depth does the rest.
    */
   /**
    * Iteration floor for the active landmark — deep landmarks need far more
@@ -313,11 +313,19 @@
 
       // Progressive sharpening: full res 160ms after the last gesture,
       // then a supersampled pass once the view is truly still.
-      // (Guarded: during a tour quality is managed by tourStep; during a
-      // landmark flight it snaps on arrival. Heavy landmark iteration
-      // floors skip supersampling — a 1.5× buffer at 10k+ iterations
-      // risks stalling the GPU.)
-      if (!app.touring && !landmarkFlight && quality < 1 && now - lastInteract > 160) {
+      // Guards: during a tour quality is managed by tourStep; during a
+      // landmark flight it snaps on arrival. Beyond ~40k effective
+      // iterations a full-res frame can take seconds and risks tripping the
+      // GPU watchdog (context loss) — extreme-depth views deliberately
+      // stay at interactive resolution: depth over sharpness at the frontier.
+      // Supersampling likewise stops past 10k iterations.
+      if (
+        !app.touring &&
+        !landmarkFlight &&
+        quality < 1 &&
+        now - lastInteract > 160 &&
+        effectiveIterations() <= 40000
+      ) {
         setQuality(1)
       } else if (
         quality === 1 &&

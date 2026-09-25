@@ -9,7 +9,7 @@ deceptively simple formula, `z ← z² + c`.
 ## Features
 
 - **Seemingly infinite zoom** — GPU double-float (df64) arithmetic pushes
-  magnification to ~10¹²  with auto-boosted iteration detail as you dive
+  magnification to ~10¹³ with auto-boosted iteration detail as you dive
 - **5 plug-in formulas** — Mandelbrot, Multibrot (zⁿ + c), Julia, Burning Ship, Tricorn
 - **Atlas of the Set** — 12 curated famous locations (Seahorse Valley, Elephant
   Valley, the Largest Island, …) with beginner-friendly stories; click to fly,
@@ -30,7 +30,7 @@ deceptively simple formula, `z ← z² + c`.
 | Language | TypeScript |
 | Rendering | Raw WebGL 2, one fullscreen triangle + fragment shader |
 | Precision | Double-float (df64) emulation — `vec2(hi, lo)` pairs |
-| Depth limit | ~10¹² magnification (df64 mantissa, ~46 bits) |
+| Depth limit | ~10¹³ magnification (df64 mantissa, ~46 bits; beyond needs perturbation) |
 
 ## Getting started
 

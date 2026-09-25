@@ -2,7 +2,7 @@
  * DF64_GLSL — double-float (df64) arithmetic library for GLSL ES 3.00.
  *
  * A df64 number is a `vec2(hi, lo)` of two float32s representing
- * hi + lo, giving ~46 bits of mantissa (~10^12 zoom depth).
+ * hi + lo, giving ~46 bits of mantissa (~10^13 zoom depth).
  *
  * A complex double-float ("dfc") is a `vec4(reHi, reLo, imHi, imLo)`.
  *
