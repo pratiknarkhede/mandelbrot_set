@@ -367,21 +367,43 @@
   }
 
   @media (max-width: 900px) {
-    /* Notch/safe-area aware chrome */
-    .topbar-wrap {
-      top: max(10px, env(safe-area-inset-top));
-      left: 10px;
-      right: 10px;
+    /* Push layout: the top bar and control sheet flow AROUND the canvas
+       instead of covering it — the fractal gets its own dedicated space
+       between them, nothing permanently overlays the diagram. */
+    .app {
+      display: flex;
+      flex-direction: column;
     }
 
-    /* Bottom sheet: collapsible so the fractal stays the star */
-    .panel-wrap {
+    .topbar-wrap {
+      position: static;
+      order: 0;
+      margin: max(10px, env(safe-area-inset-top)) 10px 10px;
+      left: auto;
+      right: auto;
       top: auto;
-      bottom: max(10px, env(safe-area-inset-bottom));
-      left: 10px;
-      right: 10px;
+    }
+
+    /* The canvas takes all remaining vertical space between bar and sheet */
+    .app > :global(.canvas-root) {
+      position: relative;
+      inset: auto;
+      order: 1;
+      flex: 1 1 auto;
+      min-height: 0;
+    }
+
+    /* Collapsible control sheet anchored at the bottom */
+    .panel-wrap {
+      position: relative;
+      order: 2;
+      margin: 0 10px max(10px, env(safe-area-inset-bottom));
+      left: auto;
+      right: auto;
+      top: auto;
+      bottom: auto;
       width: auto;
-      height: 42%;
+      height: 40%;
       transition: height 0.25s ease;
     }
 
@@ -394,21 +416,21 @@
       display: flex;
     }
 
-    /* HUD rides just above the sheet; drops down when it's collapsed */
+    /* HUD floats just above the sheet, clear of its handle */
     .hud-wrap {
       top: auto;
-      bottom: calc(42% + 30px);
+      bottom: calc(40% + 30px);
       left: 10px;
     }
 
     .panel-wrap.collapsed ~ .hud-wrap {
-      bottom: 64px;
+      bottom: 74px;
     }
 
-    /* Landmark card below the two-row topbar, full-width-ish */
+    /* Landmark card below the in-flow topbar */
     .landmark-wrap {
       bottom: auto;
-      top: 128px;
+      top: 140px;
       left: 10px;
       right: 10px;
       transform: none;
